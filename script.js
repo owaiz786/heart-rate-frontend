@@ -34,11 +34,13 @@ function processFrame() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ green_signal: greenSignal, fs: 10 })
     })
-    .then(res => res.json())
-    .then(data => {
-      result.innerText = data.heart_rate
-        ? `Heart Rate: ${data.heart_rate.toFixed(1)} BPM`
-        : "Unable to calculate heart rate";
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to get response");
+      return res.blob(); // 🔄 Get image blob instead of JSON
+    })
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      result.innerHTML = `<img src="${url}" width="100%">`; // 🎯 Show the graph
       greenSignal = [];
     })
     .catch(() => {
@@ -47,3 +49,4 @@ function processFrame() {
     });
   }
 }
+
