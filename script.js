@@ -29,7 +29,7 @@ function processFrame() {
   greenSignal.push(avgGreen);
 
   if (greenSignal.length >= 300) {
-    fetch("https://heart-rate-backend-2x4b.onrender.com", {
+    fetch("https://heart-rate-backend-2x4b.onrender.com/analyze", {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ green_signal: greenSignal, fs: 10 })
