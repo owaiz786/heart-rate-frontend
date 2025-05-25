@@ -29,24 +29,25 @@ function processFrame() {
   greenSignal.push(avgGreen);
 
   if (greenSignal.length >= 300) {
-    fetch("https://heart-rate-backend-2x4b.onrender.com/analyze", {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ green_signal: greenSignal, fs: 10 })
-    })
-    .then(res => {
-      if (!res.ok) throw new Error("Failed to get response");
-      return res.blob(); // 🔄 Get image blob instead of JSON
-    })
-    .then(blob => {
-      const url = URL.createObjectURL(blob);
-      result.innerHTML = `<img src="${url}" width="100%">`; // 🎯 Show the graph
-      greenSignal = [];
-    })
-    .catch(() => {
-      result.innerText = "Server error";
-      greenSignal = [];
-    });
+    fetch("https://your-backend.onrender.com/analyze", {
+  method: "POST",
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ green_signal: greenSignal, fs: 10 })
+})
+.then(res => {
+  if (!res.ok) throw new Error("Server response error");
+  return res.blob();  // ✅ Expect image
+})
+.then(blob => {
+  const url = URL.createObjectURL(blob);
+  result.innerHTML = `<img src="${url}" width="100%">`;
+  greenSignal = [];
+})
+.catch(() => {
+  result.innerText = "Server error";
+  greenSignal = [];
+});
+
   }
 }
 
